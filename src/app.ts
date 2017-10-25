@@ -24,8 +24,9 @@ if(config.pepper) {
 database.open(config.mongodb.uri).then((db) => {
 	// database has opened
 	try {
+		app.use(express.static(path.resolve(__dirname, config.http.root)));
 		app.get("/", (request, response) => {
-			response.sendFile(path.join(__dirname, config.http.root, "index.html"));
+			response.sendFile(path.resolve(__dirname, config.http.root, "index.html"));
 		});
 
 		io.on("connection", (socket) => {
