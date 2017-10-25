@@ -30,7 +30,7 @@ database.open(config.mongodb.uri).then((db) => {
 
 		io.on("connection", (socket) => {
 			log(`socket.io user connected`);
-			handleConnection(socket);
+			handleConnection(db, socket);
 		});
 
 		server.listen(config.http.port, () => {
