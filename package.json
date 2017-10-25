@@ -1,0 +1,32 @@
+{
+  "name": "mysterymonday-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emilekberg/mysterymonday-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/emilekberg/mysterymonday-server/issues"
+  },
+  "homepage": "https://github.com/emilekberg/mysterymonday-server#readme",
+  "devDependencies": {
+    "@types/express": "^4.0.38",
+    "@types/node": "^8.0.47",
+    "@types/socket.io": "^1.4.31",
+    "gulp": "^3.9.1",
+    "gulp-sourcemaps": "^2.6.1",
+    "gulp-typescript": "^3.2.3",
+    "typescript": "^2.5.3"
+  },
+  "dependencies": {
+    "express": "^4.16.2",
+    "socket.io": "^2.0.4"
+  }
+}

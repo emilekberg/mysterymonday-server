@@ -1,0 +1,16 @@
+{
+	"extends": "tslint:recommended",
+	"rules": {
+		"indent": [true, "tabs", 2],
+		"object-literal-sort-keys": false,
+		"trailing-comma": false,
+		"whitespace": false,
+		"ordered-imports": false,
+		"one-line": false,
+		"interface-name": false,
+		"no-shadowed-variable": false,
+		"arrow-parens": false,
+		"max-line-length": false,
+		"no-string-literal": false
+	}
+}
