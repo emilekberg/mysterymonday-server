@@ -1,6 +1,9 @@
 # Built
 bin
 
+# Security
+config.json
+
 # Logs
 logs
 *.log
