@@ -8,7 +8,7 @@ import { AddResult } from "../constants";
 export default async function addRestaurant(db: Db, restaurantName: string) {
 	const collection = db.collection("restaurants");
 	const existingRestaurant = await collection.findOne({
-		restaurantName: {
+		name: {
 			$eq: restaurantName
 		}
 	});
@@ -16,7 +16,7 @@ export default async function addRestaurant(db: Db, restaurantName: string) {
 		return AddResult.Exists;
 	}
 	const data = {
-		restaurantName
+		name: restaurantName
 	};
 	const result = await collection.insertOne(data);
 	return AddResult.Ok;

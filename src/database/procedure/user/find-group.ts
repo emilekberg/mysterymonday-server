@@ -1,5 +1,5 @@
 import { Db } from "mongodb";
-import UserModel from "../../models/user-model";
+import GroupModel from "../../models/group-model";
 
 /**
  * Searches the database for a user with the supplied username or password
@@ -7,9 +7,9 @@ import UserModel from "../../models/user-model";
  * @param username Username to search for
  * @param email Email to search for
  */
-export default async function findGroup(db: Db, groupName: string): Promise<UserModel|null> {
+export default async function findGroup(db: Db, groupName: string): Promise<GroupModel|null> {
 	const collection = db.collection("groups");
-	const foundUser = await collection.findOne({
+	const foundUser = await collection.findOne<GroupModel>({
 		name: {
 			$eq: groupName
 		}

@@ -6,12 +6,9 @@ import RestaurantModel from "../../models/restaurant-model";
  * @param db database instance
  * @param restaurantName restaurant name
  */
-export default async function findRestaurant(db: Db, restaurantName: string): Promise<RestaurantModel|null> {
+export default async function getRestaurants(db: Db, withId: boolean = true): Promise<RestaurantModel[]> {
+	const fields = !withId ? {_id: 0} : {};
 	const collection = db.collection("restaurants");
-	const foundRestaurant = await collection.findOne<RestaurantModel>({
-		name: {
-			$eq: restaurantName
-		}
-	});
-	return foundRestaurant;
+	const foundRestaurant = await collection.find<RestaurantModel>({}, fields);
+	return foundRestaurant.toArray();
 }

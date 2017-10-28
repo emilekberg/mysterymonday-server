@@ -78,6 +78,7 @@ export default function credentialsHandler(db: Db, socket: SocketIO.Socket) {
 		socket.emit("login-session", {
 			status: "ok"
 		});
+		handleAuthenticatedConnection(db, socket, foundUser._id);
 	});
 
 	/**
