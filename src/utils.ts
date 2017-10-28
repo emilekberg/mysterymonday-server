@@ -4,7 +4,7 @@ const cache = new Map<string, string>();
  * output message to the console window, with date time added.
  * @param message some thing to log.
  */
-export function log(message: string) {
+export function log(message: string|object|any[]) {
 	// tslint:disable-next-line
 	console.log(`${new Date()}: ${message}`);
 }
@@ -50,14 +50,14 @@ export function getFileAsJson<T extends {}>(url: string): T {
  * decodes a base64 string
  * @param a string to decode
  */
-export function atob(a: string): string {
-	return new Buffer(a, "base64").toString("binary");
+export function atob(rawString: string): string {
+	return new Buffer(rawString, "base64").toString("binary");
 }
 
 /**
  * encodes a string to base64
  * @param b string to encode
  */
-export function btoao(b: string): string {
-	return new Buffer(b).toString("base64");
+export function btoao(encodedString: string): string {
+	return new Buffer(encodedString).toString("base64");
 }

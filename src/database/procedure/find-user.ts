@@ -1,6 +1,13 @@
 import { Db } from "mongodb";
+import { UserModel } from "../../interfaces/user-model";
 
-export default async function findUser(db: Db, username?: string, email?: string) {
+/**
+ * Searches the database for a user with the supplied username or password
+ * @param db Database to use
+ * @param username Username to search for
+ * @param email Email to search for
+ */
+export default async function findUser(db: Db, username?: string, email?: string): Promise<UserModel|null> {
 	if(!db) {
 		return null;
 	}

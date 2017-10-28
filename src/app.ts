@@ -28,6 +28,9 @@ database.open(config.mongodb.uri).then((db) => {
 		app.get("/", (request, response) => {
 			response.sendFile(path.resolve(__dirname, config.http.root, "index.html"));
 		});
+		app.get("*", (request, response) => {
+			response.sendFile(path.resolve(__dirname, config.http.root, "index.html"));
+		});
 
 		io.on("connection", (socket) => {
 			log(`socket.io user connected`);
