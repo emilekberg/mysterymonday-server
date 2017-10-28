@@ -1,5 +1,5 @@
 import { Db } from "mongodb";
-import { UserModel } from "../../interfaces/user-model";
+import UserModel from "../../models/user-model";
 
 /**
  * Searches the database for a user with the supplied username or password
@@ -8,9 +8,6 @@ import { UserModel } from "../../interfaces/user-model";
  * @param email Email to search for
  */
 export default async function findUser(db: Db, username?: string, email?: string): Promise<UserModel|null> {
-	if(!db) {
-		return null;
-	}
 	const $and: Array<{}> = [];
 	if(username) {
 		$and.push({

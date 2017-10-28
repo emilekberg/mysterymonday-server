@@ -1,7 +1,8 @@
 import { Db } from "mongodb";
-import { SignupData } from "../../interfaces/signup-data";
-import { UserModel } from "../../interfaces/user-model";
-import HashResult from "../../interfaces/hashresult";
+import { SignupData } from "../../../interfaces/signup-data";
+import UserModel from "../../models/user-model";
+import HashResult from "../../../interfaces/hashresult";
+import { AddResult } from "../constants";
 
 /**
  * Used when adding a new user to the database
@@ -10,11 +11,6 @@ import HashResult from "../../interfaces/hashresult";
  * @param email the email of the user.
  * @param hashResult the hashed result of the password specified.
  */
-export enum AddUserResult {
-	Ok,
-	UserExists,
-	InvalidParameters
-}
 export default async function addUser(db: Db, username: string, email: string, hashResult: HashResult): Promise<number> {
 	const collection = db.collection("users");
 	const existingUser = await collection.findOne({
@@ -24,16 +20,20 @@ export default async function addUser(db: Db, username: string, email: string, h
 		]
 	});
 	if(existingUser) {
-		return AddUserResult.UserExists;
+		return AddResult.Exists;
 	}
-	const data: UserModel = {
+	const data = {
 		username,
 		authentication: {
-			password: hashResult
+			password: hashResult,
+			token: {
+				hash: "",
+				salt: ""
+			}
 		},
 		email,
 		groups: []
 	};
 	const result = await collection.insertOne(data);
-	return AddUserResult.Ok;
+	return AddResult.Ok;
 }

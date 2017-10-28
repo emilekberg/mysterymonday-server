@@ -5,7 +5,7 @@ import * as SocketIO from "socket.io";
 import * as path from "path";
 import ConfigInterface from "./interfaces/config";
 import {log, getFileAsJson, getFile} from "./utils";
-import handleConnection from "./connection";
+import credentialsHandler from "./handlers/credentials-handler";
 import {setPepper} from "./hash-utils";
 const config = getFileAsJson<ConfigInterface>("config.json");
 if (!config) {
@@ -34,7 +34,7 @@ database.open(config.mongodb.uri).then((db) => {
 
 		io.on("connection", (socket) => {
 			log(`socket.io user connected`);
-			handleConnection(db, socket);
+			credentialsHandler(db, socket);
 		});
 
 		server.listen(config.http.port, () => {

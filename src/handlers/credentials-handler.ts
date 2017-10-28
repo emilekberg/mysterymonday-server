@@ -1,19 +1,23 @@
 import * as SocketIO from "socket.io";
-import {Db} from "mongodb";
-import {log} from "./utils";
-import { createHash, verifyHash } from "./hash-utils";
-import addUser, {AddUserResult} from "./database/procedure/add-user";
-import findUser from "./database/procedure/find-user";
-import { SignupData } from "./interfaces/signup-data";
-import { LoginData } from "./interfaces/login-data";
-import { SessionData } from "./interfaces/session-data";
-import updateUserSession from "./database/procedure/update-user-session";
-export default async function handleConnection(db: Db, socket: SocketIO.Socket) {
+import {Db, ObjectId} from "mongodb";
+import {log} from "../utils";
+import { createHash, verifyHash } from "../hash-utils";
+import { AddResult } from "../database/procedure/constants";
+import addUser from "../database/procedure/user/add-user";
+import findUser from "../database/procedure/user/find-user";
+import updateUserSession from "../database/procedure/user/update-user-session";
+import { SignupData } from "../interfaces/signup-data";
+import { LoginData } from "../interfaces/login-data";
+import { SessionData } from "../interfaces/session-data";
+
+import handleAuthenticatedConnection from "./authenticated-handler";
+export default function credentialsHandler(db: Db, socket: SocketIO.Socket) {
 	/**
 	 * Login the user, if remember is passed store the session.
 	 */
 	socket.on("login", async (data: LoginData) => {
 		const foundUser = await findUser(db, data.username);
+		let token: string|undefined;
 		if(!foundUser) {
 			socket.emit("login", {
 				status: "failed",
@@ -30,12 +34,14 @@ export default async function handleConnection(db: Db, socket: SocketIO.Socket) 
 			return;
 		}
 		if(data.remember) {
-			const sessionToken = await createHash(`${foundUser._id}-${socket.handshake.address}`);
-			updateUserSession(db, data.username, sessionToken);
+			const sessionToken = await createHash(`${foundUser._id.toHexString()}-${socket.handshake.address}`);
+			token = await updateUserSession(db, data.username, sessionToken);
 		}
 		socket.emit("login", {
-			status: "ok"
+			status: "ok",
+			token
 		});
+		handleAuthenticatedConnection(db, socket, foundUser._id);
 	});
 
 	/**
@@ -58,7 +64,10 @@ export default async function handleConnection(db: Db, socket: SocketIO.Socket) 
 			return;
 		}
 		const hasTokenExpired = false;
-		const isTokenCorrect = await verifyHash(data.token, foundUser.authentication.token);
+		const isTokenCorrect = await verifyHash(`${foundUser._id.toHexString()}-${socket.handshake.address}`, {
+			hash: data.token,
+			salt: foundUser.authentication.token.salt
+		});
 		if(!isTokenCorrect) {
 			socket.emit("login-session", {
 				status: "failed",
@@ -69,7 +78,6 @@ export default async function handleConnection(db: Db, socket: SocketIO.Socket) 
 		socket.emit("login-session", {
 			status: "ok"
 		});
-
 	});
 
 	/**
@@ -79,22 +87,21 @@ export default async function handleConnection(db: Db, socket: SocketIO.Socket) 
 		const hashResult = await createHash(data.password);
 		const result = await addUser(db, data.username, data.email, hashResult);
 		switch(result) {
-			default:
-			case AddUserResult.InvalidParameters:
-				socket.emit("signup", {
-					status: "failed",
-					reason: "unknown"
-				});
-				break;
-			case AddUserResult.UserExists:
+			case AddResult.Exists:
 				socket.emit("signup", {
 					status: "failed",
 					reason: "username or email already used"
 				});
 				break;
-			case AddUserResult.Ok:
+			case AddResult.Ok:
 				socket.emit("signup", {
 					status: "ok"
+				});
+				break;
+			default:
+				socket.emit("signup", {
+					status: "failed",
+					reason: "unknown"
 				});
 				break;
 		}
