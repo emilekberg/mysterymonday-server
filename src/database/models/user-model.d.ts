@@ -9,5 +9,4 @@ export default interface UserModel {
 		password: HashResult;
 		token: HashResult;
 	};
-	groups: ObjectId[];
 }

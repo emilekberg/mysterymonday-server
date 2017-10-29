@@ -31,8 +31,7 @@ export default async function addUser(db: Db, username: string, email: string, h
 				salt: ""
 			}
 		},
-		email,
-		groups: []
+		email
 	};
 	const result = await collection.insertOne(data);
 	return AddResult.Ok;

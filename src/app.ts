@@ -21,30 +21,29 @@ if(config.pepper) {
 	setPepper(config.pepper);
 }
 
-database.open(config.mongodb.uri).then((db) => {
-	// database has opened
-	try {
-		app.use(express.static(path.resolve(__dirname, config.http.root)));
-		app.get("/", (request, response) => {
-			response.sendFile(path.resolve(__dirname, config.http.root, "index.html"));
-		});
-		app.get("*", (request, response) => {
-			response.sendFile(path.resolve(__dirname, config.http.root, "index.html"));
-		});
+database
+	.open(config.mongodb.uri)
+	.then((db) => {
+		try {
+			app.use(express.static(path.resolve(__dirname, config.http.root)));
+			app.get("*", (request, response) => {
+				response.sendFile(path.resolve(__dirname, config.http.root, "index.html"));
+			});
 
-		io.on("connection", (socket) => {
-			log(`socket.io user connected`);
-			credentialsHandler(db, socket);
-		});
+			io.on("connection", (socket) => {
+				log(`socket.io user connected`);
+				credentialsHandler(db, socket);
+			});
 
-		server.listen(config.http.port, () => {
-			log(`http listening on *:${config.http.port}`);
-		});
-	}
-	catch(e) {
+			server.listen(config.http.port, () => {
+				log(`http listening on *:${config.http.port}`);
+			});
+		}
+		catch(e) {
+			log(e);
+			database.close();
+		}
+	}).catch((e) => {
 		log(e);
-		database.close();
 	}
-}).catch((e) => {
-	log(e);
-});
+);

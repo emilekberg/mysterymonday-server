@@ -41,7 +41,7 @@ export default function credentialsHandler(db: Db, socket: SocketIO.Socket) {
 			status: "ok",
 			token
 		});
-		handleAuthenticatedConnection(db, socket, foundUser._id);
+		handleAuthenticatedConnection(db, socket, foundUser);
 	});
 
 	/**

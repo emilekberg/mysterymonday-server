@@ -2,7 +2,7 @@ import { Db, ObjectId } from "mongodb";
 import { UpdateResult } from "../constants";
 import GroupModel from "../../models/group-model";
 
-export default async function addUserToGroup(db: Db, groupName: string, userId: ObjectId): Promise<number> {
+export default async function addUserToGroup(db: Db, groupName: string, userId: ObjectId, userIdToAdd: ObjectId): Promise<number> {
 	const collection = db.collection("groups");
 	/*
 	const existingGroup = await collection.findOne<GroupModel>({
@@ -23,12 +23,13 @@ export default async function addUserToGroup(db: Db, groupName: string, userId: 
 		},
 		members: {
 			$elemMatch: {
+				$ne: userIdToAdd,
 				$eq: userId
 			}
 		}
 	}, {
 		members: {
-			$push: userId
+			$push: userIdToAdd
 		}
 	});
 	return UpdateResult.Ok;
