@@ -5,7 +5,7 @@ import GroupData from "../interfaces/group-data";
 import addRestaurant from "../database/procedure/restaurant/add-restaurant";
 import { AddResult, UpdateResult } from "../database/procedure/constants";
 import findUser from "../database/procedure/user/find-user";
-import addUserToGroup from "../database/procedure/user/add-user-to-group";
+import addUsersToGroup from "../database/procedure/user/add-users-to-group";
 import addGroup from "../database/procedure/user/add-group";
 import UserModel from "../database/models/user-model";
 
@@ -37,21 +37,12 @@ export default function handleAuthenticatedConnection(db: Db, socket: SocketIO.S
 		const result = await addGroup(db, data.groupName, data.usersToAdd);
 	});
 	socket.on("add-to-group", async (data: GroupData) => {
-		const addedUsers: string[] = [];
-		data.usersToAdd.forEach(async (userName) => {
-			const userToAdd = await findUser(db, userName);
-			if(!userToAdd) {
-				return;
-			}
-			const result = await addUserToGroup(db, data.groupName, user._id, userToAdd._id);
-			if(result !== UpdateResult.Ok) {
-				return;
-			}
-			addedUsers.push(userName);
-		});
+		const result = await addUsersToGroup(db, data.groupName, user._id, data.usersToAdd);
+		if(result !== UpdateResult.Ok) {
+			return;
+		}
 		socket.emit("added-to-group", {
-			status: "ok",
-			addedUsers
+			status: "ok"
 		});
 	});
 }
