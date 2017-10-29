@@ -63,6 +63,7 @@ export default function credentialsHandler(db: Db, socket: SocketIO.Socket) {
 			});
 			return;
 		}
+		// TODO: Store a date for the session and let it expire.
 		const hasTokenExpired = false;
 		const isTokenCorrect = await verifyHash(`${foundUser._id.toHexString()}-${socket.handshake.address}`, {
 			hash: data.token,
