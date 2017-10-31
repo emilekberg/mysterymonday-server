@@ -4,11 +4,15 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"type": "gulp",
-			"task": "watch",
-			"problemMatcher": [
-				"$gulp-tsc"
-			],
+			"type": "typescript",
+			"problemMatcher": "$tsc-watch",
+			"tsconfig": "tsconfig.json",
+			"presentation": {
+				"echo": true,
+				"reveal": "silent",
+				"focus": false,
+				"panel": "shared"
+			},
 			"group": {
 				"kind": "build",
 				"isDefault": true
