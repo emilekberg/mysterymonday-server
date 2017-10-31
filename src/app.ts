@@ -14,7 +14,9 @@ if (!config) {
 }
 
 const app = express();
-const server = new http.Server(app);
+// TODO: fix this once express is fixed.
+// @ts-ignore
+const server = http.createServer(app);
 const io = SocketIO(server);
 
 if(config.pepper) {

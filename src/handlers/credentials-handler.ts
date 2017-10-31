@@ -12,10 +12,15 @@ import { SessionData } from "../interfaces/session-data";
 
 import handleAuthenticatedConnection from "./authenticated-handler";
 export default function credentialsHandler(db: Db, socket: SocketIO.Socket) {
+	socket.on("login", onLogin);
+	socket.on("login-session", onLoginSession);
+	socket.on("signup", onSignup);
+
 	/**
-	 * Login the user, if remember is passed store the session.
+	 * Login the user
+	 * @param data logindata
 	 */
-	socket.on("login", async (data: LoginData) => {
+	async function onLogin(data: LoginData) {
 		const foundUser = await findUser(db, data.username);
 		let token: string|undefined;
 		if(!foundUser) {
@@ -42,12 +47,13 @@ export default function credentialsHandler(db: Db, socket: SocketIO.Socket) {
 			token
 		});
 		handleAuthenticatedConnection(db, socket, foundUser);
-	});
+	}
 
 	/**
-	 * If the user has a stored session, the user can login by sending the token.
+	 * Login a user using a session token
+	 * @param data session login data
 	 */
-	socket.on("login-session", async (data: SessionData) => {
+	async function onLoginSession(data: SessionData) {
 		const foundUser = await findUser(db, data.username);
 		if(!foundUser) {
 			socket.emit("login-session", {
@@ -79,13 +85,14 @@ export default function credentialsHandler(db: Db, socket: SocketIO.Socket) {
 		socket.emit("login-session", {
 			status: "ok"
 		});
-		handleAuthenticatedConnection(db, socket, foundUser._id);
-	});
+		handleAuthenticatedConnection(db, socket, foundUser);
+	}
 
 	/**
-	 * Signup
+	 * Registers a new user
+	 * @param data SignupData
 	 */
-	socket.on("signup", async (data: SignupData) => {
+	async function onSignup(data: SignupData) {
 		const hashResult = await createHash(data.password);
 		const result = await addUser(db, data.username, data.email, hashResult);
 		switch(result) {
@@ -107,5 +114,5 @@ export default function credentialsHandler(db: Db, socket: SocketIO.Socket) {
 				});
 				break;
 		}
-	});
+	}
 }
