@@ -7,6 +7,22 @@
 		{
 			"type": "node",
 			"request": "launch",
+			"name": "Mocha Tests",
+			"program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+			"args": [
+				"-u",
+				"tdd",
+				"--timeout",
+				"999999",
+				"--colors",
+				"--delay",
+				"${workspaceFolder}/test"
+			],
+			"internalConsoleOptions": "openOnSessionStart"
+		},
+		{
+			"type": "node",
+			"request": "launch",
 			"name": "Launch Program",
 			"program": "${workspaceFolder}/src\\app.ts",
 			"outFiles": [

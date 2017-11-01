@@ -4,5 +4,8 @@
 		"**/bower_components": true,
 		"**/bin": true
 	},
+	"mocha.options": {
+		"delay": false
+	},
 	"typescript.tsdk": "./node_modules/typescript/lib"
 }

@@ -25,6 +25,7 @@ export default function handleAuthenticatedConnection(db: Db, socket: SocketIO.S
 	socket.on("add-group", onAddGroup);
 	socket.on("add-to-group", onAddToGroup);
 	socket.on("add-rating", onAddRating);
+
 	/**
 	 * Adds a new restaurant to the database
 	 * @param data
@@ -89,13 +90,7 @@ export default function handleAuthenticatedConnection(db: Db, socket: SocketIO.S
 			findUser(db, data.username),
 			findGroup(db, data.group)
 		]);
-		if(!restaurant) {
-			return;
-		}
-		if(!user) {
-			return;
-		}
-		if(!group) {
+		if(!restaurant || !user || !group) {
 			return;
 		}
 
