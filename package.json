@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-	"test": "mocha --delay",
-	"test-watch": "mocha --delay --watch",
+	"test": "mocha",
+	"test-watch": "mocha --watch",
     "watch": "tsc --watch",
     "build": "tsc"
   },
@@ -28,11 +28,11 @@
     "gulp-sourcemaps": "^2.6.1",
     "gulp-typescript": "^3.2.3",
     "mocha": "^4.0.1",
-    "typescript": "^2.6.1"
+	"typescript": "^2.6.1",
+	"mongo-mock": "^2.7.0"
   },
   "dependencies": {
     "express": "^4.16.2",
-    "mongo-mock": "^2.7.0",
     "mongodb": "^2.2.33",
     "socket.io": "^2.0.4"
   }
