@@ -63,6 +63,15 @@ export default function handleAuthenticatedConnection(db: Db, socket: SocketIO.S
 			data.usersToAdd.push(user.username);
 		}
 		const result = await addGroup(db, data.groupName, data.usersToAdd);
+		if(result !== AddResult.Ok) {
+			socket.emit("add-group", {
+				status: "failed"
+			});
+			return;
+		}
+		socket.emit("add-group", {
+			status: "ok"
+		});
 	}
 
 	/**
