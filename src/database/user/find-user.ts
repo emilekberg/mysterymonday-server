@@ -1,5 +1,5 @@
 import { Db } from "mongodb";
-import UserModel from "../../models/user-model";
+import UserModel from "../user/user-model";
 
 /**
  * Searches the database for a user with the supplied username or password

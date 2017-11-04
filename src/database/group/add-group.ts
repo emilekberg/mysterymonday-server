@@ -1,6 +1,6 @@
 import { Db } from "mongodb";
 import { AddResult } from "../constants";
-import UserModel from "../../models/user-model";
+import UserModel from "../user/user-model";
 
 export default async function addGroup(db: Db, groupName: string, userIdsToAdd?: string[]): Promise<number> {
 	const collection = db.collection("groups");

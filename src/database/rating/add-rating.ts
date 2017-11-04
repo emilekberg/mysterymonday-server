@@ -1,5 +1,5 @@
 import { Db, ObjectId } from "mongodb";
-import { Ratings } from "../../models/rating-model";
+import { Ratings } from "../rating/rating-model";
 import { AddResult } from "../constants";
 export default async function addRating(db: Db, restaurantId: ObjectId, userId: ObjectId, groupId: ObjectId, orderedFood: string, comment: string, rating: Ratings) {
 	const collection = db.collection("ratings");

@@ -30,6 +30,13 @@
 				"kind": "test",
 				"isDefault": true
 			}
+		},
+		{
+			"type": "npm",
+			"script": "watch",
+			"problemMatcher": [
+				"$tsc-watch"
+			]
 		}
 	]
 }

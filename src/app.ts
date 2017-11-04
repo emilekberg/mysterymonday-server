@@ -46,6 +46,6 @@ database
 			database.close();
 		}
 	}).catch((e) => {
-		log(e);
+		log(`error! ${e}`);
 	}
 );

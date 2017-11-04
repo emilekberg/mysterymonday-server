@@ -1,7 +1,7 @@
 import { Db } from "mongodb";
-import { SignupData } from "../../../interfaces/signup-data";
-import UserModel from "../../models/user-model";
-import HashResult from "../../../interfaces/hashresult";
+import { SignupData } from "../../interfaces/signup-data";
+import UserModel from "../user/user-model";
+import HashResult from "../../interfaces/hashresult";
 import { AddResult } from "../constants";
 
 /**

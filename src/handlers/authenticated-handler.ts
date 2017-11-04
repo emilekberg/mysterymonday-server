@@ -1,17 +1,17 @@
 import { Db, ObjectId } from "mongodb";
-import getRestaurants from "../database/procedure/restaurant/get-restuarants";
+import getRestaurants from "../database/restaurant/get-restuarants";
 import RestaurantData from "../interfaces/restaurant-data";
 import GroupData from "../interfaces/group-data";
-import addRestaurant from "../database/procedure/restaurant/add-restaurant";
-import { AddResult, UpdateResult } from "../database/procedure/constants";
-import findUser from "../database/procedure/user/find-user";
-import addUsersToGroup from "../database/procedure/user/add-users-to-group";
-import addGroup from "../database/procedure/user/add-group";
-import UserModel from "../database/models/user-model";
+import addRestaurant from "../database/restaurant/add-restaurant";
+import { AddResult, UpdateResult } from "../database/constants";
+import findUser from "../database/user/find-user";
+import addUsersToGroup from "../database/group/add-users-to-group";
+import addGroup from "../database/group/add-group";
+import UserModel from "../database/user/user-model";
 import RatingData from "../interfaces/rating-data";
-import addRating from "../database/procedure/rating/add-rating";
-import findRestaurant from "../database/procedure/restaurant/find-restaurant";
-import findGroup from "../database/procedure/user/find-group";
+import addRating from "../database/rating/add-rating";
+import findRestaurant from "../database/restaurant/find-restaurant";
+import findGroup from "../database/group/find-group";
 
 /**
  * Adds a number of listeners on the socket that handles authenticated connections.
@@ -93,21 +93,6 @@ export default function handleAuthenticatedConnection(db: Db, socket: SocketIO.S
 		if(!restaurant || !user || !group) {
 			return;
 		}
-
-		await addRating(db, restaurant._id, user._id, group._id, data.orderedFood, data.comment, data.ratings);
+		const result = await addRating(db, restaurant._id, user._id, group._id, data.orderedFood, data.comment, data.ratings);
 	}
-
-	onAddRating({
-		username: "emil",
-		group: "MysteryMonday",
-		restaurant: "jallajalla",
-		comment: "sådär gott alltså",
-		orderedFood: "falafel tror jag",
-		ratings: {
-			cost: {score: 5, comment: "rätt billigt"},
-			cozyness:{score: 1, comment: "lite tråkig inredning"},
-			service: {score: 3, comment: "helt ok"},
-			taste: {score: 1, comment: "inget jag rekommenderar"},
-		}
-	});
 }

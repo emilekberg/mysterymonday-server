@@ -1,7 +1,7 @@
 import { Db, ObjectId } from "mongodb";
 import { UpdateResult } from "../constants";
-import GroupModel from "../../models/group-model";
-import UserModel from "../../models/user-model";
+import GroupModel from "../group/group-model";
+import UserModel from "../user/user-model";
 
 /**
  * Adds a number of users to a group. Resolves usernames to userids before adding them.

@@ -1,5 +1,5 @@
 import { Db } from "mongodb";
-import RestaurantModel from "../../models/restaurant-model";
+import RestaurantModel from "../restaurant/restaurant-model";
 
 /**
  * Returns the restaurant with the given name.

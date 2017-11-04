@@ -1,5 +1,5 @@
 import { Db } from "mongodb";
-import GroupModel from "../../models/group-model";
+import GroupModel from "../group/group-model";
 
 /**
  * Searches the database for a user with the supplied username or password
