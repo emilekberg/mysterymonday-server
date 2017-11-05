@@ -13,8 +13,8 @@ import findRestaurant from "../database/restaurant/find-restaurant";
 import addGroup from "../database/group/add-group";
 import findGroup from "../database/group/find-group";
 import findRatings from "../database/rating/find-ratings";
-import getRatingSumForRestaurant from "../database/restaurant/get-sum-for-restaurant";
 import { log } from "../utils";
+import getRestaurantsWithAverage from "../database/restaurant/get-restaurants-with-average";
 
 /**
  * Adds a number of listeners on the socket that handles authenticated connections.
@@ -30,7 +30,7 @@ export default function handleAuthenticatedConnection(db: Db, socket: SocketIO.S
 	socket.on("add-to-group", onAddToGroup);
 	socket.on("add-rating", onAddRating);
 	socket.on("find-ratings", onFindRatings);
-	socket.on("get-average-for-restaurant", onGetAverageRatingsForRestaurants);
+	socket.on("get-restaurants-score", onGetRestaurantScore);
 
 	/**
 	 * Adds a new restaurant to the database
@@ -127,14 +127,13 @@ export default function handleAuthenticatedConnection(db: Db, socket: SocketIO.S
 		});
 	}
 
-	async function onGetAverageRatingsForRestaurants() {
-		const restaurant = await findRestaurant(db, "jallajalla");
-		if(!restaurant) {
-			return;
-		}
-		const result = await getRatingSumForRestaurant(db, restaurant._id);
-		log(JSON.stringify(result));
+	/**
+	 * TODO: Implement this in a good way, not happy with this yet...
+	 * @param data
+	 */
+	async function onGetRestaurantScore(data: RestaurantData) {
+		// const restaurant = await findRestaurant(db, "jallajalla");
+		const result = await getRestaurantsWithAverage(db);
+		socket.emit("restaurant-score", result);
 	}
-
-	onGetAverageRatingsForRestaurants();
 }
