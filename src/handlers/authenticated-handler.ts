@@ -6,12 +6,15 @@ import addRestaurant from "../database/restaurant/add-restaurant";
 import { AddResult, UpdateResult } from "../database/constants";
 import findUser from "../database/user/find-user";
 import addUsersToGroup from "../database/group/add-users-to-group";
-import addGroup from "../database/group/add-group";
 import UserModel from "../database/user/user-model";
 import RatingData from "../interfaces/rating-data";
 import addRating from "../database/rating/add-rating";
 import findRestaurant from "../database/restaurant/find-restaurant";
+import addGroup from "../database/group/add-group";
 import findGroup from "../database/group/find-group";
+import findRatings from "../database/rating/find-ratings";
+import getRatingSumForRestaurant from "../database/restaurant/get-sum-for-restaurant";
+import { log } from "../utils";
 
 /**
  * Adds a number of listeners on the socket that handles authenticated connections.
@@ -20,11 +23,14 @@ import findGroup from "../database/group/find-group";
  * @param user the authenticated user
  */
 export default function handleAuthenticatedConnection(db: Db, socket: SocketIO.Socket, user: UserModel) {
+
 	socket.on("add-restaurant", onAddRestaurant);
 	socket.on("get-restaurants", onGetRestaurants);
 	socket.on("add-group", onAddGroup);
 	socket.on("add-to-group", onAddToGroup);
 	socket.on("add-rating", onAddRating);
+	socket.on("find-ratings", onFindRatings);
+	socket.on("get-average-for-restaurant", onGetAverageRatingsForRestaurants);
 
 	/**
 	 * Adds a new restaurant to the database
@@ -104,4 +110,31 @@ export default function handleAuthenticatedConnection(db: Db, socket: SocketIO.S
 		}
 		const result = await addRating(db, restaurant._id, user._id, group._id, data.orderedFood, data.comment, data.ratings);
 	}
+
+	async function onFindRatings(data: any) {
+		const [restaurant, user, group] = await Promise.all([
+			findRestaurant(db, data.restaurant),
+			findUser(db, data.username),
+			findGroup(db, data.group)
+		]);
+		const restaurantId = restaurant ? restaurant._id : undefined;
+		const userId = user ? user._id : undefined;
+		const groupId = group ? group._id : undefined;
+		const ratings = await findRatings(db, restaurantId, userId, groupId, false);
+		socket.emit("ratings", {
+			status: "ok",
+			ratings
+		});
+	}
+
+	async function onGetAverageRatingsForRestaurants() {
+		const restaurant = await findRestaurant(db, "jallajalla");
+		if(!restaurant) {
+			return;
+		}
+		const result = await getRatingSumForRestaurant(db, restaurant._id);
+		log(JSON.stringify(result));
+	}
+
+	onGetAverageRatingsForRestaurants();
 }
