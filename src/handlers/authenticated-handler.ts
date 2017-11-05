@@ -127,12 +127,7 @@ export default function handleAuthenticatedConnection(db: Db, socket: SocketIO.S
 		});
 	}
 
-	/**
-	 * TODO: Implement this in a good way, not happy with this yet...
-	 * @param data
-	 */
 	async function onGetRestaurantScore(data: RestaurantData) {
-		// const restaurant = await findRestaurant(db, "jallajalla");
 		const result = await getRestaurantsWithAverage(db);
 		socket.emit("restaurant-score", result);
 	}
