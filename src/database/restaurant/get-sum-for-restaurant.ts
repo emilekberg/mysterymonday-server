@@ -29,6 +29,17 @@ export default async function getRatingSumForRestaurant(db: Db, restaurantId?: O
 				foreignField: "_id",
 				as: "name"
 			}
+		},
+		{
+			$addFields: {
+				name: {
+					$reduce: {
+						input: "$name",
+						initialValue: "",
+						in: "$$this.name"
+					}
+				}
+			}
 		}
 	]).toArray());
 	return result;
