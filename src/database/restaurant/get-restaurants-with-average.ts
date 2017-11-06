@@ -18,15 +18,12 @@ export default async function getRestaurantsWithAverage(db: Db, restaurantId?: O
 						input: "$ratings",
 						initialValue: null,
 						in: {
-							$divide: [
-								{
-									$add: [
-										"$$this.rating.taste.score",
-										"$$this.rating.service.score",
-										"$$this.rating.cozyness.score",
-										"$$this.rating.cost.score"
-									]
-								}, 4
+							$avg: [
+								"$$this.rating.taste.score",
+								"$$this.rating.service.score",
+								"$$this.rating.cozyness.score",
+								"$$this.rating.cost.score",
+								"$$value"
 							]
 						}
 					}

@@ -22,7 +22,7 @@ import getRestaurantsWithAverage from "../database/restaurant/get-restaurants-wi
  * @param socket socket instance
  * @param user the authenticated user
  */
-export default function handleAuthenticatedConnection(db: Db, socket: SocketIO.Socket, user: UserModel) {
+export default async function handleAuthenticatedConnection(db: Db, socket: SocketIO.Socket, user: UserModel) {
 
 	socket.on("add-restaurant", onAddRestaurant);
 	socket.on("get-restaurants", onGetRestaurants);
@@ -100,18 +100,20 @@ export default function handleAuthenticatedConnection(db: Db, socket: SocketIO.S
 	 * Adds a rating to the system
 	 */
 	async function onAddRating(data: RatingData) {
-		const [restaurant, user, group] = await Promise.all([
+		const [restaurant, group] = await Promise.all([
 			findRestaurant(db, data.restaurant),
-			findUser(db, data.username),
 			findGroup(db, data.group)
 		]);
-		if(!restaurant || !user || !group) {
+		if(!restaurant || !group) {
+			return;
+		}
+		if(!group.members.find((x) => x.equals(user._id))) {
 			return;
 		}
 		const result = await addRating(db, restaurant._id, user._id, group._id, data.orderedFood, data.comment, data.ratings);
 	}
 
-	async function onFindRatings(data: any) {
+	async function onFindRatings(data: RatingData) {
 		const [restaurant, user, group] = await Promise.all([
 			findRestaurant(db, data.restaurant),
 			findUser(db, data.username),
@@ -131,4 +133,57 @@ export default function handleAuthenticatedConnection(db: Db, socket: SocketIO.S
 		const result = await getRestaurantsWithAverage(db);
 		socket.emit("restaurant-score", result);
 	}
+
+
+	/*
+	await onAddRating({
+		comment: "smakar bra!",
+		group: "MysteryMonday",
+		orderedFood: "Lax",
+		restaurant: "jallajalla",
+		ratings: {
+			cost: {
+				comment: "rätt billigt alltså!",
+				score: 4
+			},
+			cozyness: {
+				comment: "rätt sunkigt...",
+				score: 1
+			},
+			service: {
+				comment: "gick snabbt",
+				score: 3
+			},
+			taste: {
+				comment: "kunde smaka bättre",
+				score: 2
+			}
+		}
+	});
+
+	await onAddRating({
+		comment: "smakar bra!",
+		group: "MysteryMonday",
+		orderedFood: "Lax",
+		restaurant: "börjes",
+		ratings: {
+			cost: {
+				comment: "hyffsat pris!",
+				score: 3
+			},
+			cozyness: {
+				comment: "sjukt mysigt på ett sätt :)",
+				score: 4
+			},
+			service: {
+				comment: "gick snabbt",
+				score: 3
+			},
+			taste: {
+				comment: "top notch!",
+				score: 4
+			}
+		}
+	});
+	*/
 }

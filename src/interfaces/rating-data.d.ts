@@ -1,8 +1,8 @@
 import {ObjectId} from "mongodb";
-import {Ratings} from "../database/models/rating-model";
+import {Ratings} from "../database/rating/rating-model";
 export default interface RatingData {
 	restaurant: string;
-	username: string;
+	username?: string;
 	group: string;
 	orderedFood: string;
 	comment: string;
