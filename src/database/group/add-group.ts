@@ -2,7 +2,7 @@ import { Db } from "mongodb";
 import { AddResult } from "../constants";
 import UserModel from "../user/user-model";
 
-export default async function addGroup(db: Db, groupName: string, userIdsToAdd?: string[]): Promise<number> {
+export default async function addGroup(db: Db, groupName: string, usernamesToAdd?: string[]): Promise<number> {
 	const collection = db.collection("groups");
 	const existingGroup = await collection.findOne({
 		name: {
@@ -12,9 +12,9 @@ export default async function addGroup(db: Db, groupName: string, userIdsToAdd?:
 	if(existingGroup) {
 		return AddResult.Exists;
 	}
-	const members = userIdsToAdd ? await (await db.collection("users").find<UserModel>({
+	const members = usernamesToAdd ? await (await db.collection("users").find<UserModel>({
 		username: {
-			$in: userIdsToAdd
+			$in: usernamesToAdd
 		}
 	}, {
 		_id: 1
