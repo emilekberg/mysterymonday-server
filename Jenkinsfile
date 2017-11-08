@@ -34,7 +34,7 @@ pipeline {
         }
         stage('Publish artifacts') {
           steps {
-            archiveArtifacts './bin/**/*.js'
+            archiveArtifacts 'bin/**/*.js'
           }
         }
       }
