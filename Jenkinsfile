@@ -1,9 +1,18 @@
 pipeline {
   agent any
   stages {
-    stage('Install dependencies') {
-      steps {
-        sh 'npm install'
+    stage('Precompile') {
+      parallel {
+        stage('Install dependencies') {
+          steps {
+            sh 'npm install'
+          }
+        }
+        stage('clean up bin folder') {
+          steps {
+            sh 'rm rf ./bin'
+          }
+        }
       }
     }
     stage('Build') {
@@ -16,9 +25,18 @@ pipeline {
         sh 'npm test'
       }
     }
-    stage('Publish test result') {
-      steps {
-        junit 'test-results.xml'
+    stage('Postcompile') {
+      parallel {
+        stage('Publish test result') {
+          steps {
+            junit 'test-results.xml'
+          }
+        }
+        stage('Publish artifacts') {
+          steps {
+            archiveArtifacts './bin/**/*.js'
+          }
+        }
       }
     }
   }
