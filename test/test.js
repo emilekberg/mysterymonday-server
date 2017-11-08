@@ -1,4 +1,4 @@
-const database = require('./unit-tests/database');
+// const database = require('./unit-tests/database');
 require('./unit-tests/hash-utils.test.js');
 /*const mongodb = require('mongo-mock');
 mongodb.max_delay = 0;
