@@ -16,5 +16,10 @@ pipeline {
         echo 'npm test'
       }
     }
+    stage('Publish test result') {
+      steps {
+        junit 'test-results.xml'
+      }
+    }
   }
 }
