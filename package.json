@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-	"test": "mocha",
-	"test-watch": "mocha --watch",
+    "test": "mocha --reporter mocha-junit-reporter",
+    "test-watch": "mocha --watch",
     "watch": "tsc --watch",
     "build": "tsc"
   },
@@ -28,8 +28,9 @@
     "gulp-sourcemaps": "^2.6.1",
     "gulp-typescript": "^3.2.3",
     "mocha": "^4.0.1",
-	"typescript": "^2.6.1",
-	"mongo-mock": "^2.7.0"
+    "mocha-junit-reporter": "^1.15.0",
+    "mongo-mock": "^2.7.0",
+    "typescript": "^2.6.1"
   },
   "dependencies": {
     "express": "^4.16.2",

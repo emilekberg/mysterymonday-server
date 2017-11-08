@@ -1,5 +1,6 @@
 # Built
 bin
+test-results.xml
 
 # Security
 config.json
