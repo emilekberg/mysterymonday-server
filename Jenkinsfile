@@ -10,7 +10,7 @@ pipeline {
         }
         stage('clean up bin folder') {
           steps {
-            sh 'rm rf ./bin'
+            sh 'rm -rf ./bin'
           }
         }
       }
