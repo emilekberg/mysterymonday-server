@@ -13,12 +13,12 @@ pipeline {
     }
     stage('Test') {
       steps {
-        echo 'npm test'
+        sh 'npm test'
       }
     }
     stage('Publish test result') {
       steps {
-        junit(testResults: './test-results.xml', allowEmptyResults: true)
+        junit 'test-results.xml'
       }
     }
   }
