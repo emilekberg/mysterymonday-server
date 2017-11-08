@@ -25,18 +25,9 @@ pipeline {
         sh 'npm test'
       }
     }
-    stage('Postcompile') {
-      parallel {
-        stage('Publish test result') {
-          steps {
-            junit 'test-results.xml'
-          }
-        }
-        stage('Publish artifacts') {
-          steps {
-            archiveArtifacts 'bin/**/*.js'
-          }
-        }
+    stage('Publish test result') {
+      steps {
+        junit 'test-results.xml'
       }
     }
   }
