@@ -1,9 +1,18 @@
 pipeline {
   agent any
   stages {
-    stage('Install dependencies') {
-      steps {
-        sh 'npm install'
+    stage('Precompile') {
+      parallel {
+        stage('Install dependencies') {
+          steps {
+            sh 'npm install'
+          }
+        }
+        stage('clean up bin folder') {
+          steps {
+            sh 'rm -rf ./bin'
+          }
+        }
       }
     }
     stage('Build') {
@@ -13,12 +22,12 @@ pipeline {
     }
     stage('Test') {
       steps {
-        echo 'npm test'
+        sh 'npm test'
       }
     }
     stage('Publish test result') {
       steps {
-        junit(testResults: './test-results.xml', allowEmptyResults: true)
+        junit 'test-results.xml'
       }
     }
   }
