@@ -134,7 +134,6 @@ export default async function handleAuthenticatedConnection(db: Db, socket: Sock
 		socket.emit("restaurant-score", result);
 	}
 
-
 	/*
 	await onAddRating({
 		comment: "smakar bra!",
@@ -160,7 +159,6 @@ export default async function handleAuthenticatedConnection(db: Db, socket: Sock
 			}
 		}
 	});
-
 	await onAddRating({
 		comment: "smakar bra!",
 		group: "MysteryMonday",
