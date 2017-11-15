@@ -22,7 +22,7 @@ import getRestaurantsWithAverage from "../database/restaurant/get-restaurants-wi
  * @param socket socket instance
  * @param user the authenticated user
  */
-export default async function handleAuthenticatedConnection(db: Db, socket: SocketIO.Socket, user: UserModel) {
+export default async function handleAuthenticatedConnection(db: Db, socket: SocketIO.Socket, currentUser: UserModel) {
 
 	socket.on("add-restaurant", onAddRestaurant);
 	socket.on("get-restaurants", onGetRestaurants);
@@ -65,8 +65,8 @@ export default async function handleAuthenticatedConnection(db: Db, socket: Sock
 	 * Adds a new group. Each user needs to be part of a group to review.
 	 */
 	async function onAddGroup(data: GroupData) {
-		if(!data.usersToAdd.includes(user.username)) {
-			data.usersToAdd.push(user.username);
+		if(!data.usersToAdd.includes(currentUser.username)) {
+			data.usersToAdd.push(currentUser.username);
 		}
 		const result = await addGroup(db, data.groupName, data.usersToAdd);
 		if(result !== AddResult.Ok) {
@@ -84,7 +84,7 @@ export default async function handleAuthenticatedConnection(db: Db, socket: Sock
 	 * Add users to a group. Needs to be an array of users.
 	 */
 	async function onAddToGroup(data: GroupData) {
-		const result = await addUsersToGroup(db, data.groupName, user._id, data.usersToAdd);
+		const result = await addUsersToGroup(db, data.groupName, currentUser._id, data.usersToAdd);
 		if(result !== UpdateResult.Ok) {
 			socket.emit("added-to-group", {
 				status: "failed"
@@ -107,22 +107,35 @@ export default async function handleAuthenticatedConnection(db: Db, socket: Sock
 		if(!restaurant || !group) {
 			return;
 		}
-		if(!group.members.find((x) => x.equals(user._id))) {
+		if(!group.members.find((x) => x.equals(currentUser._id))) {
 			return;
 		}
-		const result = await addRating(db, restaurant._id, user._id, group._id, data.orderedFood, data.comment, data.ratings);
+		const result = await addRating(db, restaurant._id, currentUser._id, group._id, data.orderedFood, data.comment, data.ratings);
 	}
 
 	async function onFindRatings(data: RatingData) {
 		const [restaurant, user, group] = await Promise.all([
 			findRestaurant(db, data.restaurant),
-			findUser(db, data.username),
+			data.username ? findUser(db, data.username) : currentUser,
 			findGroup(db, data.group)
 		]);
 		const restaurantId = restaurant ? restaurant._id : undefined;
 		const userId = user ? user._id : undefined;
 		const groupId = group ? group._id : undefined;
 		const ratings = await findRatings(db, restaurantId, userId, groupId, false);
+		if(!ratings) {
+			socket.emit("ratings", {
+				status: "failed"
+			});
+			return;
+		}
+		if(ratings.length === 1) {
+			socket.emit("ratings", {
+				status: "ok",
+				ratings: ratings[0]
+			});
+			return;
+		}
 		socket.emit("ratings", {
 			status: "ok",
 			ratings
