@@ -8,6 +8,7 @@ import GroupModel from "../group/group-model";
  * @param email Email to search for
  */
 export default async function findGroupsWithUser(db: Db, userid: ObjectId): Promise<GroupModel[]> {
+	console.time("findGroupsWithUser");
 	const groups = (await db.collection("groups").find<GroupModel>({
 		members: {
 			$elemMatch: {
@@ -18,5 +19,6 @@ export default async function findGroupsWithUser(db: Db, userid: ObjectId): Prom
 		_id: 0,
 		members: 0
 	}).toArray());
+	console.timeEnd("findGroupsWithUser");
 	return groups;
 }
