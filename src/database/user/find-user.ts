@@ -24,8 +24,7 @@ export default async function findUser(db: Db, username?: string, email?: string
 			}
 		});
 	}
-	const collection = db.collection("users");
-	const foundUser = await collection.findOne<UserModel>({
+	const foundUser = await db.collection("users").findOne<UserModel>({
 		$and
 	});
 	console.timeEnd("findUser");

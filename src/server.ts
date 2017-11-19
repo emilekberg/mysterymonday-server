@@ -10,15 +10,18 @@ import {Db} from "mongodb";
 
 export default function startServer(config: Config, db: Db) {
 	const app = express();
-	// TODO: fix this once express is fixed.
-	// @ts-ignore
+	// @ts-ignore TODO: fix this once express is fixed.
 	const server = http.createServer(app);
 	const io = SocketIO(server);
 
 	app.use(express.static(path.resolve(__dirname, config.http.root)));
+	app.get("favicon.ico", (request, response) => {
+		response.sendStatus(404);
+	});
 	app.get("*", (request, response) => {
 		response.sendFile(path.resolve(__dirname, config.http.root, "index.html"));
 	});
+
 
 	io.on("connection", (socket) => {
 		log(`socket.io user connected`);
