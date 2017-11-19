@@ -8,11 +8,12 @@ import GroupModel from "../group/group-model";
  * @param email Email to search for
  */
 export default async function findGroup(db: Db, groupName: string): Promise<GroupModel|null> {
-	const collection = db.collection("groups");
-	const foundUser = await collection.findOne<GroupModel>({
+	console.time("findGroup");
+	const foundGroup = await db.collection("groups").findOne<GroupModel>({
 		name: {
 			$eq: groupName
 		}
 	});
-	return foundUser;
+	console.timeEnd("findGroup");
+	return foundGroup;
 }

@@ -8,6 +8,7 @@ import UserModel from "../user/user-model";
  * @param email Email to search for
  */
 export default async function findUser(db: Db, username?: string, email?: string): Promise<UserModel|null> {
+	console.time("findUser");
 	const $and: Array<{}> = [];
 	if(username) {
 		$and.push({
@@ -27,5 +28,6 @@ export default async function findUser(db: Db, username?: string, email?: string
 	const foundUser = await collection.findOne<UserModel>({
 		$and
 	});
+	console.timeEnd("findUser");
 	return foundUser;
 }

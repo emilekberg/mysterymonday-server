@@ -124,7 +124,7 @@ export default async function handleAuthenticatedConnection(db: Db, socket: Sock
 		const [restaurant, user, group] = await Promise.all([
 			findRestaurant(db, data.restaurant),
 			data.username ? findUser(db, data.username) : currentUser,
-			findGroup(db, data.group)
+			data.group ? findGroup(db, data.group) : null
 		]);
 		const restaurantId = restaurant ? restaurant._id : undefined;
 		const userId = user ? user._id : undefined;
@@ -136,16 +136,9 @@ export default async function handleAuthenticatedConnection(db: Db, socket: Sock
 			});
 			return;
 		}
-		if(ratings.length === 1) {
-			socket.emit("ratings", {
-				status: "ok",
-				ratings: ratings[0]
-			});
-			return;
-		}
 		socket.emit("ratings", {
 			status: "ok",
-			ratings
+			ratings: ratings.length === 1 ? ratings[0] : ratings
 		});
 	}
 
