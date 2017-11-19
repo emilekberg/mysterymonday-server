@@ -44,6 +44,7 @@ export default function credentialsHandler(db: Db, socket: SocketIO.Socket) {
 		}
 		socket.emit("login", {
 			status: "ok",
+			username: data.username,
 			token
 		});
 		handleAuthenticatedConnection(db, socket, foundUser);
@@ -83,7 +84,8 @@ export default function credentialsHandler(db: Db, socket: SocketIO.Socket) {
 			return;
 		}
 		socket.emit("login-session", {
-			status: "ok"
+			status: "ok",
+			username: data.username,
 		});
 		handleAuthenticatedConnection(db, socket, foundUser);
 	}

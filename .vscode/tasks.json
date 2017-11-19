@@ -37,6 +37,13 @@
 			"problemMatcher": [
 				"$tsc-watch"
 			]
+		},
+		{
+			"type": "typescript",
+			"tsconfig": "mysterymonday-server\\tsconfig.json",
+			"problemMatcher": [
+				"$tsc"
+			]
 		}
 	]
 }

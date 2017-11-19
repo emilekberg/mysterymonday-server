@@ -15,6 +15,7 @@ import findGroup from "../database/group/find-group";
 import findRatings from "../database/rating/find-ratings";
 import { log } from "../utils";
 import getRestaurantsWithAverage from "../database/restaurant/get-restaurants-with-average";
+import findGroupsWithUser from "../database/group/find-groups-with-user";
 
 /**
  * Adds a number of listeners on the socket that handles authenticated connections.
@@ -28,6 +29,7 @@ export default async function handleAuthenticatedConnection(db: Db, socket: Sock
 	socket.on("get-restaurants", onGetRestaurants);
 	socket.on("add-group", onAddGroup);
 	socket.on("add-to-group", onAddToGroup);
+	socket.on("get-user-groups", onGetUserGroups);
 	socket.on("add-rating", onAddRating);
 	socket.on("find-ratings", onFindRatings);
 	socket.on("get-restaurants-score", onGetRestaurantScore);
@@ -94,6 +96,11 @@ export default async function handleAuthenticatedConnection(db: Db, socket: Sock
 		socket.emit("added-to-group", {
 			status: "ok"
 		});
+	}
+
+	async function onGetUserGroups() {
+		const result = await findGroupsWithUser(db, currentUser._id);
+		socket.emit("user-groups", result);
 	}
 
 	/**
