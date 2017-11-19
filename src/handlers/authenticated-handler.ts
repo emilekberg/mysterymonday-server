@@ -130,7 +130,7 @@ export default async function handleAuthenticatedConnection(db: Db, socket: Sock
 		const userId = user ? user._id : undefined;
 		const groupId = group ? group._id : undefined;
 		const ratings = await findRatings(db, restaurantId, userId, groupId, false);
-		if(!ratings) {
+		if(!ratings || ratings.length === 0) {
 			socket.emit("ratings", {
 				status: "failed"
 			});
