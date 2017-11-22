@@ -1,8 +1,17 @@
 import {Db, ObjectId } from "mongodb";
 import RestaurantSumModel from "./resturant-sum-model";
-export default async function getRestaurantsWithAverage(db: Db, restaurantId?: ObjectId) {
-	const collection = db.collection("restaurants");
-	const result = await (collection.aggregate<RestaurantSumModel>([
+export default async function getRestaurantsWithAverage(db: Db, restaurantIds?: ObjectId[]) {
+	const pipeline = [];
+	if(restaurantIds) {
+		pipeline.push({
+			$match: {
+				_id: {
+					$in: restaurantIds
+				}
+			}
+		});
+	}
+	pipeline.push(...[
 		{
 			$lookup: {
 				from: "ratings",
@@ -36,6 +45,7 @@ export default async function getRestaurantsWithAverage(db: Db, restaurantId?: O
 				_id: 0
 			}
 		}
-	]).toArray());
+	]);
+	const result = await (db.collection("restaurants").aggregate<RestaurantSumModel>(pipeline).toArray());
 	return result;
 }

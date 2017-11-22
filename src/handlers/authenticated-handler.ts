@@ -142,59 +142,17 @@ export default async function handleAuthenticatedConnection(db: Db, socket: Sock
 		});
 	}
 
-	async function onGetRestaurantScore(data: RestaurantData) {
-		const result = await getRestaurantsWithAverage(db);
+	async function onGetRestaurantScore() {
+		// TODO: remove hardcoded group. even though mysterymonday is the only one that matters <3
+		const group = await findGroup(db, "MysteryMonday");
+		if(!group) {
+			socket.emit("restaurant-score", {
+				status: "failed"
+			});
+			return;
+		}
+		let restaurants = group.restaurants.map(x => x._id);
+		const result = await getRestaurantsWithAverage(db, restaurants);
 		socket.emit("restaurant-score", result);
 	}
-
-	/*
-	await onAddRating({
-		comment: "smakar bra!",
-		group: "MysteryMonday",
-		orderedFood: "Lax",
-		restaurant: "jallajalla",
-		ratings: {
-			cost: {
-				comment: "rätt billigt alltså!",
-				score: 4
-			},
-			cozyness: {
-				comment: "rätt sunkigt...",
-				score: 1
-			},
-			service: {
-				comment: "gick snabbt",
-				score: 3
-			},
-			taste: {
-				comment: "kunde smaka bättre",
-				score: 2
-			}
-		}
-	});
-	await onAddRating({
-		comment: "smakar bra!",
-		group: "MysteryMonday",
-		orderedFood: "Lax",
-		restaurant: "börjes",
-		ratings: {
-			cost: {
-				comment: "hyffsat pris!",
-				score: 3
-			},
-			cozyness: {
-				comment: "sjukt mysigt på ett sätt :)",
-				score: 4
-			},
-			service: {
-				comment: "gick snabbt",
-				score: 3
-			},
-			taste: {
-				comment: "top notch!",
-				score: 4
-			}
-		}
-	});
-	*/
 }
