@@ -10,7 +10,6 @@ import { log } from "../../utils";
  * @param email Email to search for
  */
 export default async function findGroup(db: Db, groupName?: string, groupId?: ObjectId): Promise<GroupModel|null> {
-	console.time("findGroup");
 	if(!groupName && !groupId) {
 		log("findGroup: both values are null");
 		return null;
@@ -27,6 +26,5 @@ export default async function findGroup(db: Db, groupName?: string, groupId?: Ob
 		});
 	}
 	const foundGroup = await db.collection("groups").findOne<GroupModel>({$or});
-	console.timeEnd("findGroup");
 	return foundGroup;
 }

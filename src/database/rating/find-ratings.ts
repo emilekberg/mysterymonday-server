@@ -2,7 +2,6 @@ import {Db, ObjectId } from "mongodb";
 import RatingModel from "./rating-model";
 import { log } from "../../utils";
 export default async function findRatings(db: Db, restaurantId?: ObjectId, userId?: ObjectId, groupId?: ObjectId, withId: boolean = true) {
-	console.time("findRatings");
 	const fields = !withId ? {
 		_id: 0,
 		restaurantId: 0,
@@ -35,7 +34,6 @@ export default async function findRatings(db: Db, restaurantId?: ObjectId, userI
 	const filter = $and.length > 0 ? {$and} : {};
 	try {
 		const foundRating = await (db.collection("ratings").find<RatingModel>(filter, fields).toArray());
-		console.timeEnd("findRatings");
 		return foundRating;
 	}
 	catch(e) {

@@ -9,7 +9,6 @@ import { log } from "../../utils";
  * @param email Email to search for
  */
 export default async function findUser(db: Db, username?: string, email?: string): Promise<UserModel|null> {
-	console.time("findUser");
 	if(!username && !email) {
 		log("findUser: both values are null");
 		return null;
@@ -32,6 +31,5 @@ export default async function findUser(db: Db, username?: string, email?: string
 	const foundUser = await db.collection("users").findOne<UserModel>({
 		$and
 	});
-	console.timeEnd("findUser");
 	return foundUser;
 }
