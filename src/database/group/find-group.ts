@@ -1,5 +1,7 @@
 import { Db } from "mongodb";
 import GroupModel from "../group/group-model";
+import { ObjectId } from "bson";
+import { log } from "../../utils";
 
 /**
  * Searches the database for a user with the supplied username or password
@@ -7,13 +9,24 @@ import GroupModel from "../group/group-model";
  * @param username Username to search for
  * @param email Email to search for
  */
-export default async function findGroup(db: Db, groupName: string): Promise<GroupModel|null> {
+export default async function findGroup(db: Db, groupName?: string, groupId?: ObjectId): Promise<GroupModel|null> {
 	console.time("findGroup");
-	const foundGroup = await db.collection("groups").findOne<GroupModel>({
-		name: {
-			$eq: groupName
-		}
-	});
+	if(!groupName && !groupId) {
+		log("findGroup: both values are null");
+		return null;
+	}
+	const $or: Array<{}> = [];
+	if(groupName) {
+		$or.push({
+			name: {$eq: groupName}
+		});
+	}
+	if(groupId) {
+		$or.push({
+			_id: {$eq: groupId}
+		});
+	}
+	const foundGroup = await db.collection("groups").findOne<GroupModel>({$or});
 	console.timeEnd("findGroup");
 	return foundGroup;
 }

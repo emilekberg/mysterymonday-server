@@ -24,7 +24,7 @@ import findGroupsWithUser from "../database/group/find-groups-with-user";
  * @param user the authenticated user
  */
 export default async function handleAuthenticatedConnection(db: Db, socket: SocketIO.Socket, currentUser: UserModel) {
-
+	socket.on("select-group", onSelectGroup);
 	socket.on("add-restaurant", onAddRestaurant);
 	socket.on("get-restaurants", onGetRestaurants);
 	socket.on("add-group", onAddGroup);
@@ -33,6 +33,20 @@ export default async function handleAuthenticatedConnection(db: Db, socket: Sock
 	socket.on("add-rating", onAddRating);
 	socket.on("find-ratings", onFindRatings);
 	socket.on("get-restaurants-score", onGetRestaurantScore);
+	let selectedGroupId: ObjectId|undefined;
+	async function onSelectGroup(data: GroupData) {
+		const result = await findGroup(db, data.groupName);
+		if(!result) {
+			socket.emit("selected-group", {
+				status: "failed"
+			});
+			return;
+		}
+		socket.emit("selected-group", {
+			status: "ok"
+		});
+		selectedGroupId = result._id;
+	}
 
 	/**
 	 * Adds a new restaurant to the database
@@ -144,15 +158,18 @@ export default async function handleAuthenticatedConnection(db: Db, socket: Sock
 
 	async function onGetRestaurantScore() {
 		// TODO: remove hardcoded group. even though mysterymonday is the only one that matters <3
-		const group = await findGroup(db, "MysteryMonday");
+		const group = await findGroup(db, undefined, selectedGroupId);
 		if(!group) {
 			socket.emit("restaurant-score", {
 				status: "failed"
 			});
 			return;
 		}
-		let restaurants = group.restaurants.map(x => x._id);
+		const restaurants = group.restaurants.map(x => x._id);
 		const result = await getRestaurantsWithAverage(db, restaurants);
-		socket.emit("restaurant-score", result);
+		socket.emit("restaurant-score", {
+			status: "ok",
+			restaurants: result
+		});
 	}
 }

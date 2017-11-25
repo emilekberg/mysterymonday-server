@@ -4,11 +4,6 @@
 		"**/bower_components": true,
 		"**/bin": true
 	},
-	"mocha.options": {
-		"delay": false
-	},
-	"typescript.tsdk": "./node_modules/typescript/lib",
-	"typescript.tsc.autoDetect": "off",
 	"grunt.autoDetect": "off",
 	"jake.autoDetect": "off",
 	"gulp.autoDetect": "off",

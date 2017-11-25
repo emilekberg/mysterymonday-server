@@ -12,6 +12,6 @@
 		"arrow-parens": false,
 		"max-line-length": false,
 		"no-string-literal": false,
-		"no-console": false,
+		"no-console": false
 	}
 }
