@@ -7,7 +7,8 @@
     "test": "mocha --reporter mocha-junit-reporter",
     "test-watch": "mocha --watch",
     "watch": "tsc --watch",
-    "build": "tsc"
+	"build": "tsc",
+	"run": "node ./bin/server.js"
   },
   "repository": {
     "type": "git",
