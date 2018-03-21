@@ -16,7 +16,7 @@ import findRatings from "../database/rating/find-ratings";
 import { log } from "../utils";
 import getRestaurantsWithAverage from "../database/restaurant/get-restaurants-with-average";
 import findGroupsWithUser from "../database/group/find-groups-with-user";
-
+import * as SocketIO from "socket.io"
 /**
  * Adds a number of listeners on the socket that handles authenticated connections.
  * @param db db instance

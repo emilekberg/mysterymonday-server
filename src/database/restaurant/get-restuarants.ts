@@ -7,8 +7,8 @@ import RestaurantModel from "../restaurant/restaurant-model";
  * @param restaurantName restaurant name
  */
 export default async function getRestaurants(db: Db, withId: boolean = true): Promise<RestaurantModel[]> {
-	const fields = !withId ? {_id: 0} : {};
+	const projection = !withId ? {_id: 0} : {};
 	const collection = db.collection("restaurants");
-	const foundRestaurant = await collection.find<RestaurantModel>({}, fields);
-	return foundRestaurant.toArray();
+	const foundRestaurants = await collection.find<RestaurantModel>({}, {projection}).toArray();
+	return foundRestaurants;
 }

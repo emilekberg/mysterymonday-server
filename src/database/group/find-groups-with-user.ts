@@ -13,10 +13,13 @@ export default async function findGroupsWithUser(db: Db, userid: ObjectId): Prom
 			$elemMatch: {
 				$eq: userid
 			}
-		}
+		},
+		
 	}, {
-		_id: 0,
-		members: 0
+		projection: {
+			_id: 0,
+			members: 0
+		}
 	}).toArray());
 	return groups;
 }

@@ -2,7 +2,7 @@ import {Db, ObjectId } from "mongodb";
 import RatingModel from "./rating-model";
 import { log } from "../../utils";
 export default async function findRatings(db: Db, restaurantId?: ObjectId, userId?: ObjectId, groupId?: ObjectId, withId: boolean = true) {
-	const fields = !withId ? {
+	const projection = !withId ? {
 		_id: 0,
 		restaurantId: 0,
 		userId: 0,
@@ -31,9 +31,9 @@ export default async function findRatings(db: Db, restaurantId?: ObjectId, userI
 		});
 	}
 
-	const filter = $and.length > 0 ? {$and} : {};
+	const query = $and.length > 0 ? {$and} : {};
 	try {
-		const foundRating = await (db.collection("ratings").find<RatingModel>(filter, fields).toArray());
+		const foundRating = await (db.collection("ratings").find<RatingModel>(query, {projection}).toArray());
 		return foundRating;
 	}
 	catch(e) {

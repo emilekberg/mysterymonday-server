@@ -15,9 +15,11 @@ export default async function addGroup(db: Db, groupName: string, usernamesToAdd
 	const members = usernamesToAdd ? await (await db.collection("users").find<UserModel>({
 		username: {
 			$in: usernamesToAdd
+		},
+	}, { 
+		projection: {
+			_id: 1
 		}
-	}, {
-		_id: 1
 	}).toArray()).map((user) => user._id) : [];
 	const data = {
 		name: groupName,

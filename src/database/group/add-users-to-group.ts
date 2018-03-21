@@ -16,7 +16,9 @@ export default async function addUsersToGroup(db: Db, groupName: string, userId:
 			$in: userNamesToAdd
 		}
 	}, {
-		_id: 1
+		projection: {
+			_id: 1
+		}
 	}).toArray()).map(user => user._id);
 
 	const result = await db.collection("groups").updateOne({
