@@ -34,8 +34,21 @@
 		{
 			"type": "npm",
 			"script": "watch",
+			"identifier": "watch",
+			"label": "watch",
 			"problemMatcher": [
-				"$tsc-watch"
+				"$tsc-watch",
+				{
+					"owner": "custom",
+					"pattern": {
+						"regexp": "_____"
+					},
+					"background": {
+						"activeOnStart": true,
+						"beginsPattern": "^20:46:14 - Starting compilation in watch mode...$",
+						"endsPattern": "^20:46:16 - Compilation complete. Watching for file changes.$"
+					},
+				}
 			]
 		},
 		{
@@ -44,6 +57,24 @@
 			"problemMatcher": [
 				"$tsc"
 			]
+		},
+		{
+			"type": "shell",
+			"identifier": "watch-server",
+			"label": "watch-server",
+			"command": "tsc -w",
+			"isBackground": true,
+			"problemMatcher": {
+				"owner": "custom",
+				"pattern": {
+					"regexp": "_____"
+				},
+				"background": {
+					"activeOnStart": true,
+					"beginsPattern": "Starting compilation in watch mode...",
+					"endsPattern": "Compilation complete. Watching for file changes."
+				},
+			}
 		}
 	]
 }

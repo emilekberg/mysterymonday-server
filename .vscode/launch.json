@@ -24,6 +24,7 @@
 			"type": "node",
 			"request": "launch",
 			"name": "Launch Program",
+			"preLaunchTask": "watch-server",
 			"program": "${workspaceFolder}/src\\app.ts",
 			"outFiles": [
 				"${workspaceFolder}/bin//*.js"
