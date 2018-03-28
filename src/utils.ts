@@ -6,7 +6,7 @@ const cache = new Map<string, string>();
  */
 export function log(message: string|object|any[]) {
 	// tslint:disable-next-line
-	console.log(`${new Date()}: ${message}`);
+	console.log(`${new Date().toISOString()}: ${message}`);
 }
 
 /**

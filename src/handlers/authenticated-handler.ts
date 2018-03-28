@@ -165,6 +165,9 @@ export default async function handleAuthenticatedConnection(db: Db, socket: Sock
 			});
 			return;
 		}
+		if(!group.restaurants) {
+			return;
+		}
 		const restaurants = group.restaurants.map(x => x._id);
 		const result = await getRestaurantsWithAverage(db, restaurants);
 		socket.emit("restaurant-score", {
