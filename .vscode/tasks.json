@@ -5,54 +5,6 @@
 	"tasks": [
 		{
 			"type": "typescript",
-			"problemMatcher": "$tsc-watch",
-			"tsconfig": "tsconfig.json",
-			"isBackground": true,
-			"label": "watch",
-			"option": "watch",
-			"presentation": {
-				"echo": true,
-				"reveal": "silent",
-				"focus": false,
-				"panel": "shared"
-			},
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			}
-		},
-		{
-			"type": "npm",
-			"label": "mocha watch",
-			"script": "test-watch",
-			"problemMatcher": [],
-			"group": {
-				"kind": "test",
-				"isDefault": true
-			}
-		},
-		{
-			"type": "npm",
-			"script": "watch",
-			"identifier": "watch",
-			"label": "watch",
-			"problemMatcher": [
-				"$tsc-watch",
-				{
-					"owner": "custom",
-					"pattern": {
-						"regexp": "_____"
-					},
-					"background": {
-						"activeOnStart": true,
-						"beginsPattern": "^20:46:14 - Starting compilation in watch mode...$",
-						"endsPattern": "^20:46:16 - Compilation complete. Watching for file changes.$"
-					},
-				}
-			]
-		},
-		{
-			"type": "typescript",
 			"tsconfig": "mysterymonday-server\\tsconfig.json",
 			"problemMatcher": [
 				"$tsc"

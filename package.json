@@ -8,7 +8,7 @@
     "test-watch": "mocha --watch",
     "watch": "tsc --watch",
     "build": "tsc",
-    "run": "node ./bin/server.js"
+    "start": "node ./bin/server.js"
   },
   "repository": {
     "type": "git",

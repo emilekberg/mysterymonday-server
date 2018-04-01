@@ -24,11 +24,11 @@ export default function startServer(config: Config, db: Db) {
 
 
 	io.on("connection", (socket) => {
-		log(`socket.io user connected`);
+		log(`socket.io user connected from ${socket.handshake.address}`);
 		credentialsHandler(db, socket);
 	});
 
 	server.listen(config.http.port, () => {
-		log(`http listening on *:${config.http.port}`);
+		log(`express listening on http:${config.http.port}`);
 	});
 }
