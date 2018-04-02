@@ -20,7 +20,7 @@ export default async function findGroup(db: Db, groupName?: string, groupId?: Ob
 			name: {$eq: groupName}
 		});
 	}
-	if(groupId) {
+	else if(groupId) {
 		$or.push({
 			_id: {$eq: groupId}
 		});

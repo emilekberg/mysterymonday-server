@@ -156,9 +156,9 @@ export default async function handleAuthenticatedConnection(db: Db, socket: Sock
 		});
 	}
 
-	async function onGetRestaurantScore() {
+	async function onGetRestaurantScore(data?: {group: string}) {
 		// TODO: remove hardcoded group. even though mysterymonday is the only one that matters <3
-		const group = await findGroup(db, undefined, selectedGroupId);
+		const group = await findGroup(db, data ? data.group : undefined, selectedGroupId);
 		if(!group) {
 			socket.emit("restaurant-score", {
 				status: "failed"
@@ -166,6 +166,10 @@ export default async function handleAuthenticatedConnection(db: Db, socket: Sock
 			return;
 		}
 		if(!group.restaurants) {
+			socket.emit("restaurant-score", {
+				status: "ok",
+				restaurants: []
+			});
 			return;
 		}
 		const restaurants = group.restaurants.map(x => x._id);
