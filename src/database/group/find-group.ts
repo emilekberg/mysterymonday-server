@@ -4,7 +4,7 @@ import { ObjectId } from "bson";
 import { log } from "../../utils";
 
 /**
- * Searches the database for a user with the supplied username or password
+ * Searches the database for group with outher name or id
  * @param db Database to use
  * @param username Username to search for
  * @param email Email to search for
