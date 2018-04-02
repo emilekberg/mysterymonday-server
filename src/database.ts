@@ -1,9 +1,10 @@
-import {MongoClient, Db} from "mongodb";
+import {MongoClient, Db, Logger} from "mongodb";
 import ConfigInterface from "./interfaces/config";
 import {log, getFileAsJson} from "./utils";
 export async function open(uri: string): Promise<Db> {
-	log("Connecting to database...");
+	log('Connecting to database...');
 	let client: MongoClient|undefined;
+	Logger.setLevel('info');
 	try {
 		client = await MongoClient.connect(uri);
 		const database = client.db('mysterymonday');
