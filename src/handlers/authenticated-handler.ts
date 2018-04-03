@@ -128,7 +128,7 @@ export default async function handleAuthenticatedConnection(db: Db, socket: Sock
 		if(!restaurant || !group) {
 			return;
 		}
-		if(!group.members.find((x) => x.equals(currentUser._id))) {
+		if(!group.users.find((x) => x.equals(currentUser._id))) {
 			return;
 		}
 		const result = await addRating(db, restaurant._id, currentUser._id, group._id, data.orderedFood, data.comment, data.ratings);

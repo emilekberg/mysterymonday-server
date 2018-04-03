@@ -25,14 +25,14 @@ export default async function addUsersToGroup(db: Db, groupName: string, userId:
 		name: {
 			$eq: groupName
 		},
-		members: {
+		users: {
 			$elemMatch: {
 				$eq: userId
 			}
 		}
 	}, {
 		$addToSet: {
-			members: {
+			users: {
 				$each: userIdsToAdd
 			}
 		}

@@ -9,7 +9,7 @@ import GroupModel from "../group/group-model";
  */
 export default async function findGroupsWithUser(db: Db, userid: ObjectId): Promise<GroupModel[]> {
 	const groups = (await db.collection("groups").find<GroupModel>({
-		members: {
+		users: {
 			$elemMatch: {
 				$eq: userid
 			}
@@ -18,7 +18,7 @@ export default async function findGroupsWithUser(db: Db, userid: ObjectId): Prom
 	}, {
 		projection: {
 			_id: 0,
-			members: 0
+			users: 0
 		}
 	}).toArray());
 	return groups;

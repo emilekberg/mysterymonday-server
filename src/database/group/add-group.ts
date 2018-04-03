@@ -12,7 +12,7 @@ export default async function addGroup(db: Db, groupName: string, usernamesToAdd
 	if(existingGroup) {
 		return AddResult.Exists;
 	}
-	const members = usernamesToAdd ? await (await db.collection("users").find<UserModel>({
+	const users = usernamesToAdd ? await (await db.collection("users").find<UserModel>({
 		username: {
 			$in: usernamesToAdd
 		},
@@ -23,7 +23,8 @@ export default async function addGroup(db: Db, groupName: string, usernamesToAdd
 	}).toArray()).map((user) => user._id) : [];
 	const data = {
 		name: groupName,
-		members
+		users,
+		restaurants: []
 	};
 	const result = await collection.insertOne(data);
 	return AddResult.Ok;
