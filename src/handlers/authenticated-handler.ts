@@ -17,6 +17,7 @@ import { log } from "../utils";
 import getRestaurantsWithAverage from "../database/restaurant/get-restaurants-with-average";
 import findGroupsWithUser from "../database/group/find-groups-with-user";
 import * as SocketIO from "socket.io"
+import getUsers from "../database/user/get-users";
 /**
  * Adds a number of listeners on the socket that handles authenticated connections.
  * @param db db instance
@@ -33,6 +34,7 @@ export default async function handleAuthenticatedConnection(db: Db, socket: Sock
 	socket.on("add-rating", onAddRating);
 	socket.on("find-ratings", onFindRatings);
 	socket.on("get-restaurants-score", onGetRestaurantScore);
+	socket.on("get-users", onGetUsernames);
 	let selectedGroupId: ObjectId|undefined;
 	async function onSelectGroup(data: GroupData) {
 		const result = await findGroup(db, data.groupName);
@@ -178,5 +180,15 @@ export default async function handleAuthenticatedConnection(db: Db, socket: Sock
 			status: "ok",
 			restaurants: result
 		});
+	}
+
+	async function onGetUsernames() {
+		const users = await getUsers(db);
+		const usernames = users.map(({username}) => ({
+			username
+		}));
+
+
+		socket.emit("users", usernames);
 	}
 }

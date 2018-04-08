@@ -18,10 +18,10 @@ export default function startServer(config: Config, db: Db) {
 	app.get("favicon.ico", (request, response) => {
 		response.sendStatus(404);
 	});
+
 	app.get("*", (request, response) => {
 		response.sendFile(path.resolve(__dirname, config.http.root, "index.html"));
 	});
-
 
 	io.on("connection", (socket) => {
 		log(`socket.io user connected from ${socket.handshake.address}`);

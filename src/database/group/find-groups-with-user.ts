@@ -18,7 +18,8 @@ export default async function findGroupsWithUser(db: Db, userid: ObjectId): Prom
 	}, {
 		projection: {
 			_id: 0,
-			users: 0
+			users: 0,
+			restaurants: 0
 		}
 	}).toArray());
 	return groups;
