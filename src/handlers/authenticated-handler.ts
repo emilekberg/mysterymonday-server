@@ -115,7 +115,7 @@ export default async function handleAuthenticatedConnection(db: Db, socket: Sock
 	}
 
 	async function onGetUserGroups() {
-		const result = await findGroupsWithUser(db, currentUser._id);
+		const result = (await findGroupsWithUser(db, currentUser._id)).map(group => group.name);
 		socket.emit("user-groups", result);
 	}
 

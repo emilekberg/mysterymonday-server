@@ -8,6 +8,7 @@ export interface Ratings {
 	service: Rating;
 	cozyness: Rating;
 	cost: Rating;
+	average: number;
 }
 export interface ReviewModel {
 	userId: ObjectId,
