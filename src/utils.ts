@@ -1,5 +1,7 @@
 import * as fs from "fs";
 const cache = new Map<string, string>();
+import * as path from "path";
+
 /**
  * output message to the console window, with date time added.
  * @param message some thing to log.
@@ -33,7 +35,7 @@ export function getFile(url: string, clearCache: boolean = false): string|null {
 		return data;
 	}
 	try {
-		data = fs.readFileSync(url).toString();
+		data = fs.readFileSync(path.resolve(__dirname, url)).toString();
 	}
 	catch {
 		return null;
