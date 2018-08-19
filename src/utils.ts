@@ -1,6 +1,7 @@
 import * as fs from "fs";
-const cache = new Map<string, string>();
 import * as path from "path";
+
+const cache = new Map<string, string>();
 
 /**
  * output message to the console window, with date time added.
@@ -35,7 +36,7 @@ export function getFile(url: string, clearCache: boolean = false): string|null {
 		return data;
 	}
 	try {
-		data = fs.readFileSync(path.resolve(__dirname, url)).toString();
+		data = fs.readFileSync(url).toString();
 	}
 	catch {
 		return null;
@@ -62,4 +63,11 @@ export function atob(rawString: string): string {
  */
 export function btoao(encodedString: string): string {
 	return new Buffer(encodedString).toString("base64");
+}
+
+export function toAbsolute(url: string): string
+{
+	const absolutePath = path.resolve(__dirname, url)
+	log("Path: " + absolutePath)
+ 	return absolutePath;
 }
