@@ -1,5 +1,8 @@
 import * as fs from "fs";
+import * as path from "path";
+
 const cache = new Map<string, string>();
+
 /**
  * output message to the console window, with date time added.
  * @param message some thing to log.
@@ -60,4 +63,11 @@ export function atob(rawString: string): string {
  */
 export function btoao(encodedString: string): string {
 	return new Buffer(encodedString).toString("base64");
+}
+
+export function toAbsolute(url: string): string
+{
+	const absolutePath = path.resolve(__dirname, url)
+	log("Path: " + absolutePath)
+ 	return absolutePath;
 }
