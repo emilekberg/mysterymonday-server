@@ -26,6 +26,9 @@
 			"name": "Launch Program",
 			"preLaunchTask": "watch-server",
 			"program": "${workspaceFolder}/src/app.ts",
+			"args": [
+				"config=../config.json"
+			],
 			"outFiles": [
 				"${workspaceFolder}/bin//*.js"
 			]
