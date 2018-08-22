@@ -68,6 +68,24 @@ export function btoao(encodedString: string): string {
 export function toAbsolute(url: string): string
 {
 	const absolutePath = path.resolve(__dirname, url)
-	log("Path: " + absolutePath)
  	return absolutePath;
+}
+
+export function getProcessArgument(name: string): string|true
+export function getProcessArgument(name: string, defaultValue: string): string
+export function getProcessArgument(name: string, defaultValue?: string)
+{
+	const argv = process.argv;
+	for(let i = 2; i < argv.length; ++i) {
+		if(argv[i].indexOf('=') > -1) {
+			const param = argv[i].substr(0, argv[i].indexOf('='));
+			const value = argv[i].substr(argv[i].indexOf('=') + 1);
+			if(param === name) {
+				return value;
+			}
+		} else if (argv[i] === name) {
+			return true;
+		}
+	}
+	return defaultValue || "";
 }
